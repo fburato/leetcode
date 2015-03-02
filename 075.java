@@ -19,4 +19,37 @@ public class Solution {
             }
         }
     }
+    public void sortColors2(int[] A) {
+        int z = 0, o = 0, t = A.length-1;
+        while(z < A.length && A[z] == 0) {
+            z++;
+        }
+        while(t >= 0 && A[t] == 2) {
+            t--;
+        }
+        o = z;
+        //A[z] != 0, A[t] != 2, z<= o
+        while(o <= t) {
+            if(A[o] == 2) {
+                int swap = A[o];
+                A[o] = A[t];
+                A[t] = swap;
+            } else if(A[o] == 0) {
+                int swap = A[o];
+                A[o] = A[z];
+                A[z] = swap;
+            } else {
+                o++;
+            }
+            while(z < A.length && A[z] == 0) {
+                z++;
+            }
+            while(t >= 0 && A[t] == 2) {
+                t--;
+            }
+            if(o < z) {
+                o = z;
+            }
+        }
+    }
 }

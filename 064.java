@@ -5,29 +5,26 @@ Note: You can only move either down or right at any point in time.
 */
 public class Solution {
     public int minPathSum(int[][] grid) {
-        if(grid == null || grid.length == 0 || grid[0].length == 0){
+        int m = grid.length, n = grid[0].length;
+        if(m == 0 || n == 0) {
             return 0;
         }
-        int m = grid.length;
-        int n = grid[0].length;
-        int prev[] = new int[n];
-        prev[0] = grid[0][0];
-        for(int i = 1; i < n; i++) {
-            prev[i] = prev[i-1]+grid[0][i];
+        // m > 0 && n > 0
+        int row[] = new int[n];
+        row[n-1] = grid[m-1][n-1];
+        for(int i = n-2; i >= 0; i--) {
+            row[i] = row[i+1] + grid[m-1][i];
         }
-        for(int row = 1; row < m; ++row) {
-            int next[] = new int[n];
-            next[0] = prev[0] + grid[row][0];
-            for(int i = 1; i < n; ++i) {
-                next[i] = grid[row][i];
-                if(next[i-1] < prev[i]) {
-                    next[i] += next[i-1];
+        for(int i = m-2; i >= 0; i--) {
+            row[n-1] = row[n-1]+ grid[i][n-1];
+            for(int j = n-2; j >= 0; j--) {
+                if(row[j] < row[j+1]) {
+                    row[j] = grid[i][j] + row[j];
                 } else {
-                    next[i] += prev[i];
+                    row[j] = grid[i][j] + row[j+1];
                 }
             }
-            prev = next;
         }
-        return prev[n-1];
+        return row[0];
     }
 }

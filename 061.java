@@ -17,27 +17,25 @@ return 4->5->1->2->3->NULL.
  * }
  */
 public class Solution {
-    private ListNode newHead;
-    private ListNode tail;
     public ListNode rotateRight(ListNode head, int n) {
-        newHead = head;
-        rotateRight(head,head,n,0);
-        return newHead;
-    }
-    
-    public int rotateRight(ListNode l, ListNode head, int n, int cur) {
-        if(l == null) {
-            return cur;
+        if(head == null || n <= 0) {
+            return head;
         }
-        int size = rotateRight(l.next,head,n,cur+1);
-        n = n %size;
-        if(l.next == null) {
-            tail = l;
-        } else if(size - cur == n+1){
-            tail.next = head;
-            newHead = l.next;
-            l.next = null;
+        // create a circular list and count the number of nodes
+        int length = 1;
+        ListNode tail = head;
+        while(tail.next != null) {
+            tail = tail.next;
+            length++;
         }
-        return size;
+        tail.next = head;
+        n = length - n % length;
+        while(n > 0) {
+            head = head.next;
+            tail = tail.next;
+            n--;
+        }
+        tail.next = null;
+        return head;
     }
 }

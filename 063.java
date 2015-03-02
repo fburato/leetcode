@@ -11,41 +11,32 @@ There is one obstacle in the middle of a 3x3 grid as illustrated below.
 */
 public class Solution {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        if(obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+        int rows = obstacleGrid.length;
+        int cols = obstacleGrid[0].length;
+        if(rows== 0 || cols == 0) {
             return 0;
         }
-        // m,n > 0
-        int m = obstacleGrid.length, n = obstacleGrid[0].length;
-        int prev[] = new int[n];
-        boolean obstacle = false;
-        for(int i = 0; i < n; ++i) {
-            if(obstacle) {
+        int prev[] = new int[cols];
+        prev[cols-1] = obstacleGrid[rows-1][cols-1] == 1 ? 0 : 1;
+        for(int i = cols-2; i >= 0; i--) {
+            if(obstacleGrid[rows-1][i] == 1) {
                 prev[i] = 0;
-            } else if(obstacleGrid[0][i] == 1) {
-                prev[i] = 0;
-                obstacle = true;
-            }  else {
-                prev[i] = 1;
+            } else {
+                prev[i] = prev[i+1];
             }
         }
-        int row = 1;
-        while(row < m) {
-            int next[] = new int[n];
-            if(obstacleGrid[row][0] == 1 || prev[0] == 0) {
-                next[0] = 0;
-            } else {
-                next[0] = 1;
+        for(int i = rows-2; i >= 0; --i) {
+            if(obstacleGrid[i][cols-1] == 1) {
+                prev[cols-1] = 0;
             }
-            for(int i = 1; i < n; ++i) {
-                if(obstacleGrid[row][i] == 1) {
-                    next[i] = 0;
+            for(int j = cols-2; j >= 0; --j) {
+                if(obstacleGrid[i][j] == 1) {
+                    prev[j] = 0;
                 } else {
-                    next[i] = next[i-1] + prev[i];
+                    prev[j] = prev[j]+ prev[j+1];
                 }
             }
-            prev = next;
-            row++;
         }
-        return prev[n-1];
+        return prev[0];
     }
 }

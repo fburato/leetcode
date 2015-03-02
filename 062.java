@@ -7,23 +7,18 @@ How many possible unique paths are there?
 */
 public class Solution {
     public int uniquePaths(int m, int n) {
-        if(m <= 0 || n <= 0){
+        if(m <= 0 || n <= 0) {
             return 0;
         }
         int prev[] = new int[n];
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < prev.length; ++i) {
             prev[i] = 1;
         }
-        int row = 1;
-        while(row < m) {
-            int next[] = new int[n];
-            next[0] = 1;
-            for(int i = 1; i < n; ++i) {
-                next[i] = next[i-1]+prev[i];
+        for(int i = m-1; i>0; --i) {
+            for(int j = n-2; j >= 0; --j) {
+                prev[j] = prev[j+1] + prev[j];
             }
-            prev = next;
-            row++;
         }
-        return prev[n-1];
+        return prev[0];
     }
 }

@@ -10,20 +10,18 @@ Your algorithm should run in O(n) time and uses constant space.
 import java.util.Arrays;
 public class Solution {
     public int firstMissingPositive(int[] A) {
-        Arrays.sort(A);
-        int i = 0;
-        while(i < A.length && A[i] <= 0){
-            i++;
-        }
-        int next = 1;
-        while(true) {
-            if(i>= A.length || A[i] != next){
-                return next;
+        for(int i = 0; i < A.length; ++i) {
+            while(1 <= A[i] && A[i] <= A.length && A[i] != i+1 && A[A[i] -1] != A[i]) {
+                int val = A[A[i]-1];
+                A[A[i]-1] = A[i];
+                A[i] = val;
             }
-            while(i < A.length && A[i] == next) {
-                i++;
-            }
-            next++;
         }
+        for(int i = 0; i < A.length; ++i) {
+            if(A[i] != i+1) {
+                return i+1;
+            }
+        }
+        return A.length+1;
     }
 }
